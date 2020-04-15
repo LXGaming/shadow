@@ -495,12 +495,12 @@ class ShadowPluginSpec extends PluginSpecification {
 
         file('lib/src/main/java/lib/LibEntity.java') << """
             package lib;
-            public interface LibEntity {}
+            public interface LibEntity { void simple(); }
         """.stripIndent()
 
         file('lib/src/main/java/lib/UnusedLibEntity.java') << """
             package lib;
-            public class UnusedLibEntity implements LibEntity {}
+            public class UnusedLibEntity implements LibEntity { public void simple() {} }
         """.stripIndent()
 
         file('lib/build.gradle') << """
@@ -516,7 +516,7 @@ class ShadowPluginSpec extends PluginSpecification {
         file('api/src/main/java/api/UnusedEntity.java') << """
             package api;
             import lib.LibEntity;
-            public class UnusedEntity implements LibEntity {}
+            public class UnusedEntity implements LibEntity { public void simple() {} public void other(LibEntity entity) { entity.simple(); } }
         """.stripIndent()
 
         file('api/build.gradle') << """
