@@ -2,7 +2,6 @@ package com.github.jengelman.gradle.plugins.shadow.internal
 
 import com.android.tools.r8.*
 import com.android.tools.r8.origin.Origin
-import com.android.tools.r8.utils.StringUtils
 import groovy.transform.CompileStatic
 import org.apache.commons.io.FilenameUtils
 import org.gradle.api.Project
@@ -13,8 +12,6 @@ import org.gradle.api.tasks.SourceSet
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-
-import static com.android.tools.r8.utils.FileUtils.isClassFile
 
 /**
  * An implementation of an UnusedTracker using R8.
@@ -92,7 +89,7 @@ class UnusedTrackerWithR8 extends UnusedTracker {
         // Add any class from the usage list to the list of removed classes.
         // This is a bit of a hack but the best things I could think of so far.
         builder.setProguardUsageConsumer(new StringConsumer() {
-            private final String LINE_SEPARATOR = StringUtils.LINE_SEPARATOR
+            private final String LINE_SEPARATOR = System.getProperty("line.separator")
             private String  lastString = LINE_SEPARATOR
             private String  classString
             private boolean expectingSeparator
@@ -157,6 +154,12 @@ class UnusedTrackerWithR8 extends UnusedTracker {
     @CompileStatic
     static String externalClassNameToInternal(String className) {
         return className.replaceAll("\\.", "/")
+    }
+
+    @CompileStatic
+    static boolean isClassFile(Path path) {
+        String name = path.getFileName().toString().toLowerCase();
+        return name == "module-info.class" ? false : name.endsWith(".class");
     }
 
     @CompileStatic
