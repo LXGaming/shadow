@@ -119,6 +119,10 @@ class UnusedTrackerWithR8 extends UnusedTracker {
 
         builder.addProguardConfiguration(proguardConfig, Origin.unknown())
 
+        // Set compilation mode to debug to disable any code of instruction
+        // level optimizations.
+        builder.setMode(CompilationMode.DEBUG)
+
         builder.setProgramConsumer(new ClassFileConsumer() {
             @Override
             void accept(ByteDataView byteDataView, String s, DiagnosticsHandler diagnosticsHandler) {
@@ -184,6 +188,10 @@ class UnusedTrackerWithR8 extends UnusedTracker {
         configs.add("-dontwarn")
 
         builder.addProguardConfiguration(configs, Origin.unknown())
+
+        // Set compilation mode to debug to disable any code of instruction
+        // level optimizations.
+        builder.setMode(CompilationMode.DEBUG)
 
         final List<String> keepRules = new ArrayList<>()
 
