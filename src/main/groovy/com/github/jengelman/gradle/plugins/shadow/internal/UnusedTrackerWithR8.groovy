@@ -188,7 +188,7 @@ class UnusedTrackerWithR8 extends UnusedTracker {
             @Override
             void accept(ByteDataView byteDataView, String s, DiagnosticsHandler diagnosticsHandler) {
                 String name = typeNameToExternalClassName(s)
-                keepRules.add("-keep class " + name + " { *; }")
+                keepRules.add("-keep,includedescriptorclasses class " + name + " { *; }")
             }
 
             @Override
@@ -209,8 +209,6 @@ class UnusedTrackerWithR8 extends UnusedTracker {
             if (f.getAbsolutePath().endsWith(".class")) {
                 byte[] bytes = Files.readAllBytes(Paths.get(f.getAbsolutePath()))
                 builder.addClassProgramData(bytes, Origin.unknown())
-            } else if (Files.isDirectory(path)) {
-                builder.addClasspathResourceProvider(DirectoryClassFileProvider.fromDirectory(path))
             } else {
                 builder.addProgramFiles(path)
             }
