@@ -30,6 +30,10 @@ class UnusedTracker {
         return false
     }
 
+    boolean hasProcessedClass(String classname) {
+        return false
+    }
+
     Path getPathToProcessedClass(String classname) {
         return null
     }

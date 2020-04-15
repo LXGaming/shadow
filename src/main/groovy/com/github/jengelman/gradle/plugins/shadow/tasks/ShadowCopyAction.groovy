@@ -324,7 +324,8 @@ class ShadowCopyAction implements CopyAction {
                 addParentDirectories(new RelativeArchivePath(zipEntry))
 
                 InputStream is
-                if (unusedTracker != null && unusedTracker.performsFullShrinking()) {
+                if (unusedTracker != null && unusedTracker.performsFullShrinking() &&
+                    unusedTracker.hasProcessedClass(file.entry.name)) {
                     is = Files.newInputStream(unusedTracker.getPathToProcessedClass(file.entry.name))
                 } else {
                     is = archive.getInputStream(file.entry)
@@ -341,7 +342,8 @@ class ShadowCopyAction implements CopyAction {
         private void remapClass(FileCopyDetails fileCopyDetails) {
             if (FilenameUtils.getExtension(fileCopyDetails.name) == 'class') {
                 InputStream is
-                if (unusedTracker != null && unusedTracker.performsFullShrinking()) {
+                if (unusedTracker != null && unusedTracker.performsFullShrinking() &&
+                    unusedTracker.hasProcessedClass(fileCopyDetails.relativePath.pathString)) {
                     is = Files.newInputStream(unusedTracker.getPathToProcessedClass(fileCopyDetails.relativePath.pathString))
                 } else {
                     is = fileCopyDetails.file.newInputStream()
@@ -401,7 +403,8 @@ class ShadowCopyAction implements CopyAction {
             zipOutStr.putNextEntry(mappedFile.entry)
 
             InputStream is
-            if (unusedTracker != null && unusedTracker.performsFullShrinking() && isClass(archiveFile.entry.name)) {
+            if (unusedTracker != null && unusedTracker.performsFullShrinking() &&
+                isClass(archiveFile.entry.name) && unusedTracker.hasProcessedClass(archiveFile.entry.name)) {
                 is = Files.newInputStream(unusedTracker.getPathToProcessedClass(archiveFile.entry.name))
             } else {
                 is = archive.getInputStream(archiveFile.entry)

@@ -58,6 +58,13 @@ class UnusedTrackerWithR8 extends UnusedTracker {
 
     @Override
     @CompileStatic
+    boolean hasProcessedClass(String classname) {
+        Path path = getPathToProcessedClass(classname)
+        return Files.exists(path)
+    }
+
+    @Override
+    @CompileStatic
     Path getPathToProcessedClass(String classname) {
         final String className = FilenameUtils.removeExtension(classname).replace('/' as char, '.' as char)
         Path processedFile = Paths.get(tmpDir.toString(), className.replaceAll("\\.", "/") + ".class")
