@@ -12,16 +12,26 @@ import org.vafer.jdependency.Clazz
 import org.vafer.jdependency.Clazzpath
 import org.vafer.jdependency.ClazzpathUnit
 
+import java.nio.file.Path
+
 /** Tracks unused classes in the project classpath. */
 class UnusedTracker {
-    private final FileCollection toMinimize
-    private final List<ClazzpathUnit> projectUnits
-    private final Clazzpath cp = new Clazzpath()
+    protected final FileCollection toMinimize
+    protected final List<ClazzpathUnit> projectUnits
+    protected final Clazzpath cp = new Clazzpath()
 
-    private UnusedTracker(List<File> classDirs, FileCollection classJars, FileCollection toMinimize) {
+    protected UnusedTracker(List<File> classDirs, FileCollection classJars, FileCollection toMinimize) {
         this.toMinimize = toMinimize
         projectUnits = classDirs.collect { cp.addClazzpathUnit(it) }
         projectUnits.addAll(classJars.collect { cp.addClazzpathUnit(it) })
+    }
+
+    boolean performsFullShrinking() {
+        return false
+    }
+
+    Path getPathToProcessedClass(String classname) {
+        return null
     }
 
     Set<String> findUnused() {
@@ -71,7 +81,7 @@ class UnusedTracker {
         }
     }
 
-    private static FileCollection getApiJarsFromProject(Project project) {
+    protected static FileCollection getApiJarsFromProject(Project project) {
         def apiDependencies = project.configurations.asMap['api']?.dependencies ?: null
         if (apiDependencies == null) return project.files()
 

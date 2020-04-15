@@ -4,6 +4,13 @@ apply plugin: 'groovy'
 
 repositories {
     jcenter()
+
+    // for r8 dependency
+    repositories {
+        maven {
+            url 'http://storage.googleapis.com/r8-releases/raw'
+        }
+    }
 }
 
 ScriptHolder holder = new ScriptHolder()
