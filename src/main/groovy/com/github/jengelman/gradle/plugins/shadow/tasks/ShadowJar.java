@@ -99,7 +99,7 @@ public class ShadowJar extends Jar implements ShadowSpec {
     @Override
     protected CopyAction createCopyAction() {
         DocumentationRegistry documentationRegistry = getServices().get(DocumentationRegistry.class);
-        final UnusedTracker unusedTracker = minimizeJar ? UnusedTracker.forProject(getProject(), configurations, dependencyFilterForMinimize) : null;
+        final UnusedTracker unusedTracker = minimizeJar ? UnusedTrackerWithR8.forProject(getProject(), configurations, dependencyFilterForMinimize) : null;
         return new ShadowCopyAction(getArchiveFile().get().getAsFile(), getInternalCompressor(), documentationRegistry,
                 this.getMetadataCharset(), transformers, relocators, getRootPatternSet(), shadowStats,
                 versionUtil, isPreserveFileTimestamps(), minimizeJar, unusedTracker);

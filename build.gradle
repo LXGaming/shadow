@@ -60,6 +60,13 @@ apply from: file('gradle/dependencies.gradle')
 
 repositories {
     jcenter()
+
+    // for r8 dependency
+    repositories {
+        maven {
+            url 'http://storage.googleapis.com/r8-releases/raw'
+        }
+    }
 }
 
 test {
